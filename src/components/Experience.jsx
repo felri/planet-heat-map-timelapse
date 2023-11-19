@@ -13,7 +13,7 @@ const Moon = () => {
 
   // Moon's position and scale values
   const moonScale = 0.27; // The Moon is about 1/4 the size of Earth
-  const distanceFromEarth = 3; // Adjust as needed for visual effect
+  const distanceFromEarth = 4; // Adjust as needed for visual effect
 
   return (
     <mesh
@@ -68,16 +68,16 @@ const Marker = ({ country, year }) => {
     if (frameCount % updateFrequency === 0) {
       const zoomLevel = camera.zoom;
 
-      if (zoomLevel < 300) {
-        textRef.current.visible = false;
-      } else {
-        textRef.current.visible = true;
-      }
-
       if (zoomLevel < 100) {
         sphereRef.current.visible = false;
       } else {
         sphereRef.current.visible = true;
+      }
+
+      if (zoomLevel < 300) {
+        textRef.current.visible = false;
+      } else {
+        textRef.current.visible = true;
       }
 
       textRef.current.scale.set(0.02, 0.02, 0.02);
@@ -167,7 +167,10 @@ const Marker = ({ country, year }) => {
 };
 
 export const Experience = ({ data, currentYear }) => {
-  const earthTexture = useLoader(THREE.TextureLoader, "/earth-texture-no-water.png");
+  const earthTexture = useLoader(
+    THREE.TextureLoader,
+    "/earth-texture-no-water.png"
+  );
   const [shaderMaterial, setShaderMaterial] = React.useState();
   const { size, clock } = useThree();
 
@@ -233,8 +236,10 @@ export const Experience = ({ data, currentYear }) => {
         speed={1}
       />
       <Sphere args={[1, 32, 32]}>
-      {shaderMaterial && <primitive object={shaderMaterial} attach="material" />}
-      {data.map((country, index) => (
+        {shaderMaterial && (
+          <primitive object={shaderMaterial} attach="material" />
+        )}
+        {data.map((country, index) => (
           <Marker key={index} country={country} year={currentYear} />
         ))}
       </Sphere>
@@ -242,9 +247,3 @@ export const Experience = ({ data, currentYear }) => {
     </>
   );
 };
-
-// <meshStandardMaterial
-// map={earthMap}
-// normalMap={normalMap}
-// normalScale={new THREE.Vector2(1.2, 1.2)}
-// />
