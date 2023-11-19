@@ -75,6 +75,13 @@ body {
   display: none;
 }
 
+.controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .github-button {
   position: absolute;
   bottom: 70px;

@@ -15,6 +15,7 @@ function App() {
   const [currentYear, setCurrentYear] = useState(1962);
   const [isPlaying, setIsPlaying] = useState(false);
   const yearsRef = useRef(null);
+  const [bottomPosition, setBottomPosition] = useState("0px");
 
   const endYear = new Date().getFullYear() - 1;
   const years = Array.from({ length: endYear - 1962 + 1 }, (_, i) => 1962 + i);
@@ -49,6 +50,22 @@ function App() {
     csv("./merged_country_data.csv").then((data) => {
       setCountries(data);
     });
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Adjust the position based on the new viewport height
+      // Add your logic here to calculate the position
+      setBottomPosition("0px"); // Example adjustment
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Call the handler right away so state gets updated with initial window size
+    handleResize();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -102,20 +119,6 @@ function App() {
         overflow: "hidden",
       }}
     >
-      <Canvas
-        style={{ height: "100vh", width: "100vw" }}
-        shadows
-        camera={{
-          position: [1, 1, 1],
-          fov: 30,
-          zoom: 350,
-          near: 0.00001,
-          far: 1000,
-        }}
-        orthographic
-      >
-        <Experience data={countries} currentYear={currentYear} />
-      </Canvas>
       <div
         style={{
           position: "fixed",
@@ -160,25 +163,45 @@ function App() {
           {getAverageByYear(countries, currentYear).toFixed(2)}°C
         </div>
       </div>
-      <div className="play-button" onClick={togglePlay}>
-        {isPlaying ? (
-          <PauseSvg width={50} height={50} fill="white" />
-        ) : (
-          <PlaySvg width={50} height={50} fill="white" />
-        )}
-      </div>
-      <div className="repeat-button" onClick={resetYears}>
-        <RepeatSvg width={50} height={50} color="white" />
-      </div>
-      <a
-        href="https://github.com/felri/planet-heat-map-timelapse"
-        target="_blank"
-        rel="noreferrer"
-        className="github-button"
+      <Canvas
+        style={{ height: "100vh", width: "100vw" }}
+        shadows
+        camera={{
+          position: [1, 1, 1],
+          fov: 30,
+          zoom: 350,
+          near: 0.00001,
+          far: 1000,
+        }}
+        orthographic
       >
-        <GithubSvg width={25} height={25} color="white" />
-      </a>
-      <div ref={yearsRef} className="container-year">
+        <Experience data={countries} currentYear={currentYear} />
+      </Canvas>
+      <div style={{ bottom: bottomPosition }} className="controls">
+        <div className="play-button" onClick={togglePlay}>
+          {isPlaying ? (
+            <PauseSvg width={50} height={50} fill="white" />
+          ) : (
+            <PlaySvg width={50} height={50} fill="white" />
+          )}
+        </div>
+        <div className="repeat-button" onClick={resetYears}>
+          <RepeatSvg width={50} height={50} color="white" />
+        </div>
+        <a
+          href="https://github.com/felri/planet-heat-map-timelapse"
+          target="_blank"
+          rel="noreferrer"
+          className="github-button"
+        >
+          <GithubSvg width={25} height={25} color="white" />
+        </a>
+      </div>
+      <div
+        ref={yearsRef}
+        className="container-year"
+        style={{ bottom: bottomPosition }}
+      >
         {years.map((year) => (
           <span
             onClick={() => {
