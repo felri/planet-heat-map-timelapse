@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Koulen-Regular"; /* Give a name to your font */
-  src: url("./components/Koulen-Regular") format("ttf");
+  src: url("./assets/Koulen-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -12,7 +12,7 @@
 
 body {
   margin: 0;
-  font-family: "Koulen-Regular";
+  font-family: "Koulen-Regular", sans-serif; /* Fallback to a generic font */
 }
 
 .play-button {
@@ -33,7 +33,7 @@ body {
 
 .temperature-tooltip {
   width: 100%;
-  margin-top: -28px;
+  margin-top: -36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,8 +45,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   box-sizing: border-box;
 }
 
@@ -61,10 +61,18 @@ body {
   padding-top: 10px;
   padding-bottom: 10px;
   z-index: 2;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.302);
   font-size: 20px;
 }
 
 .container-year::-webkit-scrollbar {
   display: none;
+}
+
+.github-button {
+  position: absolute;
+  bottom: 70px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1000;
 }

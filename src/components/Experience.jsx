@@ -3,7 +3,10 @@ import { OrbitControls, Text } from "@react-three/drei";
 import { Sphere, Stars } from "@react-three/drei";
 import { useLoader, useThree, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import fontFamily from "./Koulen-Regular.ttf";
+import fontFamily from "../assets/Koulen-Regular.ttf";
+
+import waterVertexShader from "./waterVertex.glsl";
+import waterFragmentShader from "./waterFragment.glsl";
 
 const Moon = () => {
   const moonTexture = useLoader(THREE.TextureLoader, "moon.jpg"); // Load your moon texture
@@ -17,14 +20,13 @@ const Moon = () => {
       position={[distanceFromEarth, 2, 0]}
       scale={[moonScale, moonScale, moonScale]}
     >
-      <sphereBufferGeometry args={[1, 32, 32]} />
+      <sphereGeometry args={[1, 32, 32]} />
       <meshStandardMaterial map={moonTexture} />
     </mesh>
   );
 };
 
 const Marker = ({ country, year }) => {
-  let oldPosition = [0, 0, 0];
   const updateFrequency = 15; // Update every 10 frames
   let frameCount = 0;
 
@@ -34,12 +36,14 @@ const Marker = ({ country, year }) => {
 
   // Define a minimum and a maximum size for the spheres
   const minSize = 0.01; // Minimum sphere size
-  const maxSize = 0.05; // Maximum sphere size
+  const maxSize = 0.1; // Maximum sphere size
 
-  // Calculate the sphere size based on temperature
-  // The size increases linearly from minSize at 0°C to maxSize at 2°C
+  // Ensure that the temperature used for calculation doesn't exceed maxTemperature
+  const effectiveTemperature = Math.min(temperature, maxTemperature);
+
+  // Calculate the sphere size
   const sphereSize =
-    minSize + (maxSize - minSize) * (temperature);
+    minSize + (maxSize - minSize) * (effectiveTemperature / maxTemperature);
 
   const lat = country.latitude;
   const lng = country.longitude;
@@ -126,7 +130,7 @@ const Marker = ({ country, year }) => {
   }
 
   // Offset the text position slightly outside the globe
-  const textOffset = 1.1; // Adjust this value as needed
+  const textOffset = 1.12; // Adjust this value as needed
   const textPosition = [x * textOffset, y * textOffset, z * textOffset];
 
   return (
@@ -163,10 +167,30 @@ const Marker = ({ country, year }) => {
 };
 
 export const Experience = ({ data, currentYear }) => {
-  const [earthMap, normalMap] = useLoader(THREE.TextureLoader, [
-    "/earth-texture.png", // Replace with your texture path
-    "/earth-normal.png", // Update to the new PNG normal map path
-  ]);
+  const earthTexture = useLoader(THREE.TextureLoader, "/earth-texture-no-water.png");
+  const [shaderMaterial, setShaderMaterial] = React.useState();
+  const { size, clock } = useThree();
+
+  React.useEffect(() => {
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        earthTexture: { value: earthTexture },
+        iResolution: { value: new THREE.Vector2(size.width, size.height) },
+        iTime: { value: 0 },
+      },
+      vertexShader: waterVertexShader,
+      fragmentShader: waterFragmentShader,
+    });
+
+    setShaderMaterial(material);
+  }, [earthTexture, size.width, size.height]);
+
+  useFrame(() => {
+    if (shaderMaterial) {
+      shaderMaterial.uniforms.iTime.value = clock.getElapsedTime();
+      shaderMaterial.uniforms.iResolution.value.set(size.width, size.height);
+    }
+  });
 
   const { scene } = useThree();
 
@@ -192,7 +216,7 @@ export const Experience = ({ data, currentYear }) => {
       <OrbitControls
         enablePan={false}
         maxZoom={1200}
-        minZoom={20}
+        minZoom={30}
         autoRotate
         autoRotateSpeed={-0.2}
         rotateSpeed={0.3}
@@ -200,21 +224,17 @@ export const Experience = ({ data, currentYear }) => {
         position0={new THREE.Vector3(0, 2, 3)}
       />
       <Stars
-        radius={0.5}
+        radius={1}
         depth={50}
         count={10000}
         factor={6}
-        saturation={0}
+        saturation={1}
         fade
         speed={1}
       />
       <Sphere args={[1, 32, 32]}>
-        <meshStandardMaterial
-          map={earthMap}
-          normalMap={normalMap}
-          normalScale={new THREE.Vector2(1.2, 1.2)}
-        />
-        {data.map((country, index) => (
+      {shaderMaterial && <primitive object={shaderMaterial} attach="material" />}
+      {data.map((country, index) => (
           <Marker key={index} country={country} year={currentYear} />
         ))}
       </Sphere>
@@ -222,3 +242,9 @@ export const Experience = ({ data, currentYear }) => {
     </>
   );
 };
+
+// <meshStandardMaterial
+// map={earthMap}
+// normalMap={normalMap}
+// normalScale={new THREE.Vector2(1.2, 1.2)}
+// />

@@ -8,6 +8,7 @@ import "./index.css";
 import PlaySvg from "./svgs/play";
 import PauseSvg from "./svgs/pause";
 import RepeatSvg from "./svgs/repeat";
+import GithubSvg from "./svgs/github";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -94,24 +95,6 @@ function App() {
 
   return (
     <div style={{ height: "100vh", width: "100vw", background: "#000" }}>
-      <div ref={yearsRef} className="container-year">
-        {years.map((year) => (
-          <span
-            key={year}
-            id={`year-${year}`}
-            style={{
-              display: "inline-block",
-              marginRight: "15px",
-              marginLeft: "5px",
-              color: year === currentYear ? "white" : "grey",
-              fontWeight: year === currentYear ? "bold" : "normal",
-              fontSize: year === currentYear ? "3rem" : "2rem",
-            }}
-          >
-            {year}
-          </span>
-        ))}
-      </div>
       <Canvas
         style={{ height: "100vh", width: "100vw" }}
         shadows
@@ -136,11 +119,11 @@ function App() {
           flexDirection: "column",
         }}
       >
-        <div style={{ fontSize: "1.5rem" }}>
+        <div style={{ fontSize: "1.8rem" }}>
           {getAverageByYear(countries, currentYear).toFixed(2)}°C
         </div>
         <div style={{ fontSize: "1.2rem" }}>
-          Average temperature above pre-industrial levels
+          Earth's average temperature in {currentYear} above pre-industrial era
         </div>
         {/* color code, green to yellow to red to black */}
         <div
@@ -158,7 +141,6 @@ function App() {
               background: `linear-gradient(to right, #00b000, #ffff00, #ff0000, #000000)`,
             }}
           ></div>
-          {/* start of the div set to 0 celsius text and end to 2 celscius */}
           <div className="temperature-tooltip">
             <div>0°C</div>
             <div>1°C</div>
@@ -175,6 +157,37 @@ function App() {
       </div>
       <div className="repeat-button" onClick={resetYears}>
         <RepeatSvg width={50} height={50} color="white" />
+      </div>
+      <a
+        href="https://github.com/felri/planet-heat-map-timelapse"
+        target="_blank"
+        rel="noreferrer"
+        className="github-button"
+      >
+        <GithubSvg width={25} height={25} color="white" />
+      </a>
+      <div ref={yearsRef} className="container-year">
+        {years.map((year) => (
+          <span
+            onClick={() => {
+              setCurrentYear(year);
+              scrollToCurrentYear(year);
+            }}
+            key={year}
+            id={`year-${year}`}
+            style={{
+              cursor: "pointer",
+              display: "inline-block",
+              marginRight: "15px",
+              marginLeft: "5px",
+              color: year === currentYear ? "white" : "grey",
+              fontWeight: year === currentYear ? "bold" : "normal",
+              fontSize: year === currentYear ? "3rem" : "2rem",
+            }}
+          >
+            {year}
+          </span>
+        ))}
       </div>
     </div>
   );
