@@ -50,6 +50,102 @@ merged_data.to_csv('merged_country_data.csv', index=False)
 For the web development part, I started with the r3f-vite-starter kit. It helped me set up the project quickly. Then, I added the merged CSV data to the project directory to be used in rendering the 3D visualization.
 
 ### The Visualization
-Using Three.js, I developed a 3D model of Earth. I then represented each country's data as spheres on the globe, with their size and color reflecting the temperature change. This model allows users to interact with the data, turning abstract numbers into a visual story of climate change over the decades.
+Using Three.js, I developed a 3D model of Earth, R3F is great to write Three.js in a React JSX way, so the scene setup is simple as you can see below
+
+```js
+    <group>
+      <OrbitControls />
+      <Stars />
+      <Sphere args={[1, 32, 32]}>
+        {shaderMaterial && (
+          <primitive object={shaderMaterial} attach="material" />
+        )}
+      </Sphere>
+    </group>
+```
+
+It's worth mentioning that I applied shaderMaterial to the globe's surface to simulate the ocean. I removed the oceans from my [earth texture](https://github.com/felri/planet-heat-map-timelapse/blob/main/public/earth-texture-no-water.png) and created this shader to processes the graphics on the GPU, enabling the visual effect of a moving liquid. The full GLSL code can be [found here](https://github.com/felri/planet-heat-map-timelapse/blob/main/src/components/waterFragment.glsl).
+
+The creation of the shader
+```js
+React.useEffect(() => {
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        earthTexture: { value: earthTexture },
+        iResolution: { value: new THREE.Vector2(size.width, size.height) },
+        iTime: { value: 0 },
+      },
+      vertexShader: waterVertexShader,
+      fragmentShader: waterFragmentShader,
+    });
+
+    setShaderMaterial(material);
+  }, [earthTexture, size.width, size.height]);
+
+  useFrame(() => {
+    if (shaderMaterial) {
+      shaderMaterial.uniforms.iTime.value = clock.getElapsedTime();
+      shaderMaterial.uniforms.iResolution.value.set(size.width, size.height);
+    }
+  });
+```
+
+After with the help of Chatgpt I translated the latitude and longitude coords into x y z positions inside my Three.js globe.
+
+```js
+const Marker = ({ country }) => {
+  const lat = country.latitude;
+  const lng = country.longitude;
+  const name = country.name;
+
+  // Adjust these formulas if needed
+  const phi = (90 - lat) * (Math.PI / 180); // Convert latitude to radians
+  const theta = (lng + 180) * (Math.PI / 180); // Convert longitude to radians
+
+  // Spherical to Cartesian conversion for a unit sphere
+  // I have no idea of what this means
+  const x = Math.sin(phi) * Math.cos(theta);
+  const y = Math.cos(phi);
+  const z = -Math.sin(phi) * Math.sin(theta); // Negating Z to invert axis
+```
+
+Then I just render the marker inside of map of my countries
+
+```js
+export const Experience = ({ data, currentYear }) => {
+  return (
+    <group>
+      <Sphere args={[1, 32, 32]}>
+        {shaderMaterial && (
+          <primitive object={shaderMaterial} attach="material" />
+        )}
+        {data.map((country, index) => (
+          <Marker key={index} country={country} year={currentYear} />
+        ))}
+      </Sphere>
+    </group>
+  );
+};
+```
+I  then represented each country's data as spheres on the globe, with their size and color reflecting the temperature change. This model allows users to interact with the data, turning abstract numbers into a visual story of climate change over the decades.
+
+```js
+  const temperature = parseFloat(country["F" + year]);
+  const color = getColorForTemperature(temperature);
+  const maxTemperature = 2; // Maximum expected temperature
+
+  const minSize = 0.012; // Minimum sphere size
+  const maxSize = 0.1; // Maximum sphere size
+
+  // Ensure that the temperature used for calculation doesn't exceed maxTemperature
+  const effectiveTemperature = Math.min(temperature, maxTemperature);
+
+  // Calculate the sphere size
+  const sphereSize =
+    minSize + (maxSize - minSize) * (effectiveTemperature / maxTemperature);
+```
+
+The rest of the code is pretty trivial, basically a prop defining the current year and a setInterval updating at N seconds to the next year.
+
 
 

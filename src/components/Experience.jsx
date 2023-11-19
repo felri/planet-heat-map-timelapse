@@ -34,7 +34,6 @@ const Marker = ({ country, year }) => {
   const color = getColorForTemperature(temperature);
   const maxTemperature = 2; // Maximum expected temperature
 
-  // Define a minimum and a maximum size for the spheres
   const minSize = 0.012; // Minimum sphere size
   const maxSize = 0.1; // Maximum sphere size
 
@@ -249,7 +248,6 @@ export const Experience = ({ data, currentYear }) => {
           <Marker key={index} country={country} year={currentYear} />
         ))}
       </Sphere>
-      // <Moon />
     </group>
   );
 };
