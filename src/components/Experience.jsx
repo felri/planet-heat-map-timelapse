@@ -13,7 +13,7 @@ const Moon = () => {
 
   // Moon's position and scale values
   const moonScale = 0.27; // The Moon is about 1/4 the size of Earth
-  const distanceFromEarth = 4; // Adjust as needed for visual effect
+  const distanceFromEarth = 6; // Adjust as needed for visual effect
 
   return (
     <mesh
@@ -169,7 +169,7 @@ const Marker = ({ country, year }) => {
 export const Experience = ({ data, currentYear }) => {
   const earthTexture = useLoader(
     THREE.TextureLoader,
-    "/earth-texture-no-water.png"
+    "./earth-texture-no-water.png"
   );
   const [shaderMaterial, setShaderMaterial] = React.useState();
   const { size, clock } = useThree();
@@ -243,7 +243,7 @@ export const Experience = ({ data, currentYear }) => {
           <Marker key={index} country={country} year={currentYear} />
         ))}
       </Sphere>
-      <Moon />
+      // <Moon />
     </>
   );
 };

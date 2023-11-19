@@ -46,7 +46,7 @@ function App() {
   };
 
   useEffect(() => {
-    csv("merged_country_data.csv").then((data) => {
+    csv("./merged_country_data.csv").then((data) => {
       setCountries(data);
     });
   }, []);
@@ -98,7 +98,7 @@ function App() {
       <Canvas
         style={{ height: "100vh", width: "100vw" }}
         shadows
-        camera={{ position: [3, 3, 3], fov: 30, zoom: 350 }}
+        camera={{ position: [3, 3, 3], fov: 30, zoom: 350, near: 0.00001, far: 1000 }}
         orthographic
       >
         <Experience data={countries} currentYear={currentYear} />
