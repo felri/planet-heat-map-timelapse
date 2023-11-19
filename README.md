@@ -6,7 +6,7 @@
 
 I aimed to present climate change data in a 3D environment, making complex information more digestible and engaging. This technical walkthrough details the creation of an interactive globe that displays temperature changes by country over time.
 
-# Running locally
+## Running locally
 ```
 git clone https://github.com/felri/planet-heat-map-timelapse
 cd planet-heat-map-timelapse
