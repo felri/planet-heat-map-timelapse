@@ -15,7 +15,7 @@ const Moon = () => {
   const moonScale = 0.27; // The Moon is about 1/4 the size of Earth
   const distanceFromEarth = 6; // Adjust as needed for visual effect
 
-  return ( 
+  return (
     <mesh
       position={[distanceFromEarth, 2, 0]}
       scale={[moonScale, moonScale, moonScale]}
@@ -160,7 +160,6 @@ const Marker = ({ country, year }) => {
         renderOrder={2}
         transparent={true}
         opacity={0.5}
-        
       >
         {name}
       </Text>
@@ -218,16 +217,16 @@ export const Experience = ({ data, currentYear }) => {
   }, [scene]);
 
   const stopAutoRotateHandler = () => {
-    setAutoRotate(false);
-  }
+    if (autoRotate) setAutoRotate(false);
+  };
 
   return (
-    <>
+    <group onPointerDown={stopAutoRotateHandler}>
       <OrbitControls
         enablePan={false}
         maxZoom={1200}
         minZoom={30}
-        autoRotate
+        autoRotate={autoRotate}
         autoRotateSpeed={-0.2}
         rotateSpeed={0.3}
         zoomSpeed={0.2}
@@ -251,6 +250,6 @@ export const Experience = ({ data, currentYear }) => {
         ))}
       </Sphere>
       // <Moon />
-    </>
+    </group>
   );
 };

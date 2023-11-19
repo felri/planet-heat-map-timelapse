@@ -106,7 +106,7 @@ function App() {
         style={{ height: "100vh", width: "100vw" }}
         shadows
         camera={{
-          position: [3, 3, 3],
+          position: [1, 1, 1],
           fov: 30,
           zoom: 350,
           near: 0.00001,
@@ -118,7 +118,7 @@ function App() {
       </Canvas>
       <div
         style={{
-          position: "absolute",
+          position: "fixed",
           zIndex: 1,
           top: "0px",
           left: "0px",
