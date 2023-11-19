@@ -23,6 +23,13 @@ body {
   z-index: 1000;
 }
 
+* {
+  font-weight: bold !important;
+  -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
 .repeat-button {
   position: absolute;
   bottom: 70px;
@@ -59,9 +66,8 @@ body {
   white-space: nowrap;
   text-align: center;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 0px;
   z-index: 2;
-  background-color: rgba(0, 0, 0, 0.302);
   font-size: 20px;
 }
 

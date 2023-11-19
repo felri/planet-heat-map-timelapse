@@ -94,11 +94,24 @@ function App() {
   }, []);
 
   return (
-    <div style={{ height: "100vh", width: "100vw", background: "#000" }}>
+    <div
+      style={{
+        height: "100vh",
+        width: "100vw",
+        background: "#000",
+        overflow: "hidden",
+      }}
+    >
       <Canvas
         style={{ height: "100vh", width: "100vw" }}
         shadows
-        camera={{ position: [3, 3, 3], fov: 30, zoom: 350, near: 0.00001, far: 1000 }}
+        camera={{
+          position: [3, 3, 3],
+          fov: 30,
+          zoom: 350,
+          near: 0.00001,
+          far: 1000,
+        }}
         orthographic
       >
         <Experience data={countries} currentYear={currentYear} />
@@ -107,11 +120,10 @@ function App() {
         style={{
           position: "absolute",
           zIndex: 1,
-          top: "10px",
+          top: "0px",
           left: "0px",
           color: "white",
           width: "100%",
-          background: "rgba(0,0,0,0.5)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -119,19 +131,13 @@ function App() {
           flexDirection: "column",
         }}
       >
-        <div style={{ fontSize: "1.8rem" }}>
-          {getAverageByYear(countries, currentYear).toFixed(2)}°C
-        </div>
-        <div style={{ fontSize: "1.2rem" }}>
-          Earth's average temperature in {currentYear} above pre-industrial era
-        </div>
         {/* color code, green to yellow to red to black */}
         <div
           style={{
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            marginTop: "10px",
+            marginTop: "0px",
           }}
         >
           <div
@@ -146,6 +152,12 @@ function App() {
             <div>1°C</div>
             <div>2°C</div>
           </div>
+        </div>
+        <div style={{ fontSize: "1rem", whiteSpace: "nowrap" }}>
+          Earth's average temperature in {currentYear} above pre-industrial era
+        </div>
+        <div style={{ fontSize: "2rem" }}>
+          {getAverageByYear(countries, currentYear).toFixed(2)}°C
         </div>
       </div>
       <div className="play-button" onClick={togglePlay}>

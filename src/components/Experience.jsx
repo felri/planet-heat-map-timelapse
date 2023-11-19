@@ -15,7 +15,7 @@ const Moon = () => {
   const moonScale = 0.27; // The Moon is about 1/4 the size of Earth
   const distanceFromEarth = 6; // Adjust as needed for visual effect
 
-  return (
+  return ( 
     <mesh
       position={[distanceFromEarth, 2, 0]}
       scale={[moonScale, moonScale, moonScale]}
@@ -27,7 +27,7 @@ const Moon = () => {
 };
 
 const Marker = ({ country, year }) => {
-  const updateFrequency = 15; // Update every 10 frames
+  const updateFrequency = 25; // Update every 10 frames
   let frameCount = 0;
 
   const temperature = parseFloat(country["F" + year]);
@@ -35,7 +35,7 @@ const Marker = ({ country, year }) => {
   const maxTemperature = 2; // Maximum expected temperature
 
   // Define a minimum and a maximum size for the spheres
-  const minSize = 0.01; // Minimum sphere size
+  const minSize = 0.012; // Minimum sphere size
   const maxSize = 0.1; // Maximum sphere size
 
   // Ensure that the temperature used for calculation doesn't exceed maxTemperature
@@ -147,6 +147,7 @@ const Marker = ({ country, year }) => {
         />
       </mesh>
       <Text
+        scale={0.02}
         ref={textRef}
         position={textPosition}
         color="white"
@@ -159,6 +160,7 @@ const Marker = ({ country, year }) => {
         renderOrder={2}
         transparent={true}
         opacity={0.5}
+        
       >
         {name}
       </Text>
@@ -173,6 +175,7 @@ export const Experience = ({ data, currentYear }) => {
   );
   const [shaderMaterial, setShaderMaterial] = React.useState();
   const { size, clock } = useThree();
+  const [autoRotate, setAutoRotate] = React.useState(true);
 
   React.useEffect(() => {
     const material = new THREE.ShaderMaterial({
@@ -213,6 +216,10 @@ export const Experience = ({ data, currentYear }) => {
       scene.remove(directionalLight);
     };
   }, [scene]);
+
+  const stopAutoRotateHandler = () => {
+    setAutoRotate(false);
+  }
 
   return (
     <>
