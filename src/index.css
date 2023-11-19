@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Koulen-Regular"; /* Give a name to your font */
+  src: url("./components/Koulen-Regular") format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
 #root {
   width: 100vw;
   height: 100vh;
@@ -5,4 +12,59 @@
 
 body {
   margin: 0;
+  font-family: "Koulen-Regular";
+}
+
+.play-button {
+  position: absolute;
+  bottom: 70px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.repeat-button {
+  position: absolute;
+  bottom: 70px;
+  left: 100px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.temperature-tooltip {
+  width: 100%;
+  margin-top: -28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 25px;
+  stroke: black;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+.container-year {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.7);
+  font-size: 20px;
+}
+
+.container-year::-webkit-scrollbar {
+  display: none;
 }
