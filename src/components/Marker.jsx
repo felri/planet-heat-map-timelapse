@@ -8,9 +8,14 @@ export const Marker = ({ country, year }) => {
   const updateFrequency = 25; // Update every 10 frames
   let frameCount = 0;
 
-  const temperature = parseFloat(country["F" + year]);
+  let temperature = parseFloat(country["F" + year]);
   const color = getColorForTemperature(temperature);
   const maxTemperature = 2; // Maximum expected temperature
+  const minTemperature = 0; // Minimum expected temperature
+
+  if (temperature < 0) {
+    temperature = 0;
+  }
 
   const minSize = 0.012; // Minimum sphere size
   const maxSize = 0.1; // Maximum sphere size
