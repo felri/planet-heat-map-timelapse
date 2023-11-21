@@ -157,7 +157,7 @@ function App() {
           </div>
         </div>
         <div style={{ fontSize: "1rem", whiteSpace: "nowrap" }}>
-          Earth's average temperature in {currentYear} above pre-industrial era
+          Earth's average temperature above pre-industrial era
         </div>
         <div style={{ fontSize: "2rem" }}>
           {getAverageByYear(countries, currentYear).toFixed(2)}°C
