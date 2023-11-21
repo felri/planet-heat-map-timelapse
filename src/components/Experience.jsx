@@ -1,6 +1,5 @@
-import React from "react";
-import { OrbitControls } from "@react-three/drei";
-import { Sphere, Stars } from "@react-three/drei";
+import React, { useState, useEffect, useRef } from "react";
+import { Sphere, Stars, OrbitControls } from "@react-three/drei";
 import { useLoader, useThree, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Marker } from "./Marker";
@@ -11,13 +10,14 @@ import waterFragmentShader from "./waterFragment.glsl";
 export const Experience = ({ data, currentYear }) => {
   const earthTexture = useLoader(
     THREE.TextureLoader,
-    "./earth-texture-no-water.png"
+    // "./earth-texture-no-water.png"
+    "./nasa-earth-no-water.png"
   );
-  const [shaderMaterial, setShaderMaterial] = React.useState();
+  const [shaderMaterial, setShaderMaterial] = useState();
   const { size, clock } = useThree();
-  const [autoRotate, setAutoRotate] = React.useState(true);
+  const [autoRotate, setAutoRotate] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const material = new THREE.ShaderMaterial({
       uniforms: {
         earthTexture: { value: earthTexture },
@@ -40,7 +40,7 @@ export const Experience = ({ data, currentYear }) => {
 
   const { scene } = useThree();
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Ambient Light
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
     scene.add(ambientLight);
@@ -65,12 +65,12 @@ export const Experience = ({ data, currentYear }) => {
     <group onPointerDown={stopAutoRotateHandler}>
       <OrbitControls
         enablePan={false}
-        maxZoom={1200}
+        maxZoom={1300}
         minZoom={30}
         autoRotate={autoRotate}
         autoRotateSpeed={-0.2}
         rotateSpeed={0.3}
-        zoomSpeed={0.2}
+        zoomSpeed={0.4}
         position0={new THREE.Vector3(0, 2, 3)}
       />
       <Stars
@@ -78,7 +78,7 @@ export const Experience = ({ data, currentYear }) => {
         depth={50}
         count={10000}
         factor={6}
-        saturation={1}
+        saturation={2}
         fade
         speed={1}
       />
