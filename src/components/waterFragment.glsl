@@ -4,7 +4,7 @@ uniform float iTime;
 uniform sampler2D earthTexture;
 varying vec2 vUv;
 
-float animationSpeedFactor=.25;// Scale down the animation speed
+float animationSpeedFactor=.17;// Scale down the animation speed
 
 float noise(vec2 p)
 {
