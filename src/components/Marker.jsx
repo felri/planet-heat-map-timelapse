@@ -20,7 +20,7 @@ export const Marker = ({ country, year }) => {
   let temperature = parseFloat(country["F" + year]);
   const maxTemperature = 2;
 
-  if (temperature < 0 || isNaN(temperature)) {
+  if (temperature < 0) {
     temperature = 0;
   }
 
