@@ -17,7 +17,7 @@ function App() {
   const yearsRef = useRef(null);
   const [bottomPosition, setBottomPosition] = useState("0px");
 
-  const endYear = new Date().getFullYear() - 1;
+  const endYear = new Date().getFullYear() - 2;
   const years = Array.from({ length: endYear - 1962 + 1 }, (_, i) => 1962 + i);
 
   function getAverageByYear(data, year) {
